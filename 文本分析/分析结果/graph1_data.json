@@ -1,0 +1,167 @@
+{
+  "nodes": [
+    {
+      "id": "中国观众",
+      "node_type": "culture",
+      "lang": "zh"
+    },
+    {
+      "id": "美国观众",
+      "node_type": "culture",
+      "lang": "en"
+    },
+    {
+      "id": "日本观众",
+      "node_type": "culture",
+      "lang": "ja"
+    },
+    {
+      "id": "战争",
+      "node_type": "theme"
+    },
+    {
+      "id": "自由",
+      "node_type": "theme"
+    },
+    {
+      "id": "命运",
+      "node_type": "theme"
+    },
+    {
+      "id": "种族",
+      "node_type": "theme"
+    },
+    {
+      "id": "复仇",
+      "node_type": "theme"
+    },
+    {
+      "id": "morality",
+      "node_type": "theme"
+    },
+    {
+      "id": "war",
+      "node_type": "theme"
+    },
+    {
+      "id": "fate",
+      "node_type": "theme"
+    },
+    {
+      "id": "freedom",
+      "node_type": "theme"
+    },
+    {
+      "id": "race",
+      "node_type": "theme"
+    },
+    {
+      "id": "戦争",
+      "node_type": "theme"
+    },
+    {
+      "id": "運命",
+      "node_type": "theme"
+    },
+    {
+      "id": "正義",
+      "node_type": "theme"
+    },
+    {
+      "id": "民族",
+      "node_type": "theme"
+    }
+  ],
+  "edges": [
+    {
+      "source": "中国观众",
+      "target": "战争",
+      "weight": 340,
+      "lang": "zh"
+    },
+    {
+      "source": "中国观众",
+      "target": "自由",
+      "weight": 306,
+      "lang": "zh"
+    },
+    {
+      "source": "中国观众",
+      "target": "命运",
+      "weight": 163,
+      "lang": "zh"
+    },
+    {
+      "source": "中国观众",
+      "target": "种族",
+      "weight": 108,
+      "lang": "zh"
+    },
+    {
+      "source": "中国观众",
+      "target": "复仇",
+      "weight": 69,
+      "lang": "zh"
+    },
+    {
+      "source": "美国观众",
+      "target": "morality",
+      "weight": 1015,
+      "lang": "en"
+    },
+    {
+      "source": "美国观众",
+      "target": "war",
+      "weight": 896,
+      "lang": "en"
+    },
+    {
+      "source": "美国观众",
+      "target": "fate",
+      "weight": 407,
+      "lang": "en"
+    },
+    {
+      "source": "美国观众",
+      "target": "freedom",
+      "weight": 260,
+      "lang": "en"
+    },
+    {
+      "source": "美国观众",
+      "target": "race",
+      "weight": 101,
+      "lang": "en"
+    },
+    {
+      "source": "日本观众",
+      "target": "戦争",
+      "weight": 122,
+      "lang": "ja"
+    },
+    {
+      "source": "日本观众",
+      "target": "運命",
+      "weight": 106,
+      "lang": "ja"
+    },
+    {
+      "source": "日本观众",
+      "target": "自由",
+      "weight": 80,
+      "lang": "ja"
+    },
+    {
+      "source": "日本观众",
+      "target": "正義",
+      "weight": 78,
+      "lang": "ja"
+    },
+    {
+      "source": "日本观众",
+      "target": "民族",
+      "weight": 55,
+      "lang": "ja"
+    }
+  ]
+}
