@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>电商用户行为分析 - ECharts 多图表示例</title>
+    <!-- 引入 ECharts 核心库 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        /* 页面布局样式,让图表分区展示 */
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 400px 400px;
+            gap: 20px;
+            padding: 20px;
+        }
+        .chart-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>电商平台用户行为分析 Dashboard</h2>
+    <div class="chart-container">
+        <!-- 1. 关系图：用户-商品-类目关联 -->
+        <div class="chart-item" id="relationChart"></div>
+        <!-- 2. 柱状图：各类目下单量对比 -->
+        <div class="chart-item" id="barChart"></div>
+        <!-- 3. 折线图：近7日访问量趋势 -->
+        <div class="chart-item" id="lineChart"></div>
+        <!-- 4. 饼图：支付方式占比 -->
+        <div class="chart-item" id="pieChart"></div>
+    </div>
+
+    <script>
+        // 初始化所有图表
+        function initCharts() {
+            // ========== 1. 关系图：用户-商品-类目关联 ==========
+            const relationChart = echarts.init(document.getElementById('relationChart'));
+            const relationOption = {
+                title: {
+                    text: '用户-商品-类目关联关系',
+                    left: 'center',
+                    fontSize: 14
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c}'
+                },
+                series: [{
+                    type: 'graph', // 关系图核心类型
+                    layout: 'force', // 力导向布局（自动计算节点位置）
+                    symbolSize: 50, // 节点大小
+                    roam: true, // 允许鼠标缩放/拖拽
+                    label: {
+                        show: true // 显示节点文字
+                    },
+                    edgeSymbol: ['none', 'arrow'], // 边的两端样式：无/箭头
+                    edgeSymbolSize: [4, 10], // 箭头大小
+                    edgeLabel: {
+                        fontSize: 12
+                    },
+                    // 节点数据：区分用户、商品、类目三类节点
+                    data: [
+                        { name: '用户A', category: 0, value: 5 }, // 分类0：用户
+                        { name: '用户B', category: 0, value: 4 },
+                        { name: '用户C', category: 0, value: 3 },
+                        { name: 'T恤', category: 1, value: 8 }, // 分类1：商品
+                        { name: '运动鞋', category: 1, value: 6 },
+                        { name: '耳机', category: 1, value: 7 },
+                        { name: '服装', category: 2, value: 14 }, // 分类2：类目
+                        { name: '数码', category: 2, value: 7 }
+                    ],
+                    // 边数据：表示节点间的关联关系
+                    links: [
+                        { source: '用户A', target: 'T恤', value: 2 }, // 用户A买了T恤
+                        { source: '用户A', target: '耳机', value: 1 }, // 用户A买了耳机
+                        { source: '用户B', target: '运动鞋', value: 3 }, // 用户B买了运动鞋
+                        { source: '用户C', target: 'T恤', value: 1 }, // 用户C买了T恤
+                        { source: 'T恤', target: '服装', value: 3 }, // T恤属于服装类目
+                        { source: '运动鞋', target: '服装', value: 3 }, // 运动鞋属于服装类目
+                        { source: '耳机', target: '数码', value: 1 } // 耳机属于数码类目
+                    ],
+                    // 分类样式：不同类别节点用不同颜色
+                    categories: [
+                        { name: '用户', itemStyle: { color: '#409EFF' } },
+                        { name: '商品', itemStyle: { color: '#67C23A' } },
+                        { name: '类目', itemStyle: { color: '#E6A23C' } }
+                    ],
+                    force: {
+                        repulsion: 200, // 节点排斥力
+                        edgeLength: 100 // 边的长度
+                    }
+                }]
+            };
+            relationChart.setOption(relationOption);
+
+            // ========== 2. 柱状图：各类目下单量对比 ==========
+            const barChart = echarts.init(document.getElementById('barChart'));
+            const barOption = {
+                title: {
+                    text: '各商品类目下单量对比',
+                    left: 'center',
+                    fontSize: 14
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'shadow' }
+                },
+                grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                xAxis: [{ type: 'category', data: ['服装', '数码', '家居', '美妆', '食品'] }],
+                yAxis: [{ type: 'value', name: '下单量（单）' }],
+                series: [{
+                    name: '下单量',
+                    type: 'bar',
+                    data: [1280, 850, 620, 480, 950],
+                    itemStyle: { color: '#409EFF' },
+                    label: {
+                        show: true,
+                        position: 'top' // 数值显示在柱子顶部
+                    }
+                }]
+            };
+            barChart.setOption(barOption);
+
+            // ========== 3. 折线图：近7日用户访问量趋势 ==========
+            const lineChart = echarts.init(document.getElementById('lineChart'));
+            const lineOption = {
+                title: {
+                    text: '近7日用户访问量（UV）趋势',
+                    left: 'center',
+                    fontSize: 14
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                }],
+                yAxis: [{ type: 'value', name: '访问量（人）' }],
+                series: [{
+                    name: 'UV',
+                    type: 'line',
+                    data: [2560, 2890, 3120, 2980, 3560, 4200, 3850],
+                    smooth: true, // 平滑折线
+                    itemStyle: { color: '#67C23A' },
+                    areaStyle: { color: 'rgba(103, 194, 58, 0.2)' }, // 填充面积
+                    markPoint: { // 标记最大值/最小值
+                        data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }]
+                    },
+                    markLine: { // 标记平均值
+                        data: [{ type: 'average', name: '平均值' }]
+                    }
+                }]
+            };
+            lineChart.setOption(lineOption);
+
+            // ========== 4. 饼图：用户购买支付方式占比 ==========
+            const pieChart = echarts.init(document.getElementById('pieChart'));
+            const pieOption = {
+                title: {
+                    text: '用户购买支付方式占比',
+                    left: 'center',
+                    fontSize: 14
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c}单 ({d}%)'
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left'
+                },
+                series: [{
+                    name: '支付方式',
+                    type: 'pie',
+                    radius: ['40%', '70%'], // 环形饼图
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: 16,
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: { show: false },
+                    data: [
+                        { value: 1850, name: '微信支付' },
+                        { value: 1520, name: '支付宝' },
+                        { value: 380, name: '银行卡' },
+                        { value: 150, name: '其他' }
+                    ],
+                    itemStyle: {
+                        color: function(params) {
+                            const colorList = ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C'];
+                            return colorList[params.dataIndex];
+                        }
+                    }
+                }]
+            };
+            pieChart.setOption(pieOption);
+
+            // 自适应窗口大小变化
+            window.addEventListener('resize', () => {
+                relationChart.resize();
+                barChart.resize();
+                lineChart.resize();
+                pieChart.resize();
+            });
+        }
+
+        // 页面加载完成后初始化图表
+        window.onload = initCharts;
+    </script>
+</body>
+</html>
